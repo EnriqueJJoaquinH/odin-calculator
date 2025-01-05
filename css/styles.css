@@ -32,6 +32,14 @@ button {
     background-color: greenyellow;
     padding: 16px;
     border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+
+    height: 132px;
+}
+
+#screen>* {
+    flex: 1;
 }
 
 #result {

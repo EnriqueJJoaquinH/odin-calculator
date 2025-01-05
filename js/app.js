@@ -1,3 +1,10 @@
+// ? Global variables
+let displayContent = '';
+let operator1 = 0;
+let operator2 = 0;
+let operation = '';
+let lastAnswer = 0;
+
 function add(a, b) {
     return a + b;
 }
@@ -29,3 +36,31 @@ function operate(a, operator, b) {
 
     return result;
 }
+
+let opTxt = document.querySelector('#operation');
+let buttons = document.querySelector('#buttons');
+buttons.addEventListener('click', (event) => {
+    if (event.target.id === 'buttons' || Array.from(event.target.classList).includes('row'))
+        return;
+    switch (event.target.textContent) {
+        case 'AC':
+            opTxt.textContent = '';
+            break;
+        case 'DEL':
+            opTxt.textContent = opTxt.textContent.trimEnd().slice(0, -1)
+            break;
+        case '+':
+        case '-':
+        case '×':
+        case '÷':
+        case '=':
+            opTxt.textContent += ` ${event.target.textContent} `;
+            break;
+        case '•':
+            opTxt.textContent += '.';
+            break;
+        default:
+            opTxt.textContent += event.target.textContent;
+            break;
+    }
+})
