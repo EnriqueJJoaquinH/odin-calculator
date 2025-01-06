@@ -62,7 +62,7 @@ button {
     flex: 1;
 }
 
-button#zero {
+#zero-btn {
     flex: 2;
     padding: 16px 8px;
 }
