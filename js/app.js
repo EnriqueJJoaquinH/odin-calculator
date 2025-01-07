@@ -46,6 +46,7 @@ function operate(a, operator = '', b = 0) {
 
 function getOperationComponents(operationStr) {
     let operationArr = operationStr.split(' ');
+    operationArr.forEach((item, i) => item == 'Ans'? operationArr[i] = lastAnswer : item);
     operator1 = +operationArr[0];
     operation = operationArr[1];
     operator2 = +operationArr[2];
@@ -56,13 +57,22 @@ function clearScreen() {
     resTxt.textContent = '';
 }
 
+function deleteLastTyped() {
+    let opTxtArr = opTxt.textContent.split(' ');
+    if (opTxtArr[opTxtArr.length - 1] == 'Ans')
+        opTxt.textContent = opTxt.textContent.replace('Ans', '');
+    else
+        opTxt.textContent = opTxt.textContent.trimEnd().slice(0, -1);
+}
+
 function populateScreen(event) {
     if (event.target.id === 'buttons' || Array.from(event.target.classList).includes('row'))
         return;
 
     if (event.target === equalBtn){
         getOperationComponents(opTxt.textContent);
-        resTxt.textContent = `${operate(operator1, operation, operator2)}`;
+        lastAnswer = operate(operator1, operation, operator2);
+        resTxt.textContent = `${lastAnswer}`;
         return;
     }
 
@@ -73,16 +83,16 @@ function populateScreen(event) {
             clearScreen();
             break;
         case 'DEL':
-            opTxt.textContent = opTxt.textContent.trimEnd().slice(0, -1);
+            deleteLastTyped();
+            break;
+        case '•':
+            opTxt.textContent += '.';
             break;
         case '+':
         case '−':
         case '×':
         case '÷':
             opTxt.textContent += ` ${event.target.textContent} `;
-            break;
-        case '•':
-            opTxt.textContent += '.';
             break;
         default:
             opTxt.textContent += event.target.textContent;
