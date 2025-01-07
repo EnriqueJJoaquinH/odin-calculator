@@ -8,6 +8,7 @@ let opTxt = document.querySelector('#operation');
 let resTxt = document.querySelector('#result');
 let buttons = document.querySelector('#buttons');
 let equalBtn = document.querySelector('#equal-btn');
+let pointBtn = document.querySelector('#decimal-btn');
 
 function add(a, b) {
     return a + b;
@@ -22,9 +23,8 @@ function multiply (a, b) {
 }
 
 function divide (a, b) {
-    if (b == 0) {
+    if (b == 0)
         return 'Division by 0 not allowed';
-    }
     return a / b;
 }
 
@@ -61,8 +61,11 @@ function deleteLastTyped() {
     let opTxtArr = opTxt.textContent.split(' ');
     if (opTxtArr[opTxtArr.length - 1] == 'Ans')
         opTxt.textContent = opTxt.textContent.replace('Ans', '');
-    else
+    else {
+        if (opTxt.textContent[opTxt.textContent.length - 1] == '.')
+            pointBtn.classList.remove('inactive-btn');
         opTxt.textContent = opTxt.textContent.trimEnd().slice(0, -1);
+    }
 }
 
 function populateScreen(event) {
@@ -73,6 +76,7 @@ function populateScreen(event) {
         getOperationComponents(opTxt.textContent);
         lastAnswer = operate(operator1, operation, operator2);
         resTxt.textContent = `${lastAnswer}`;
+        pointBtn.classList.remove('inactive-btn');
         return;
     }
 
@@ -87,12 +91,14 @@ function populateScreen(event) {
             break;
         case '•':
             opTxt.textContent += '.';
+            pointBtn.classList.add('inactive-btn');
             break;
         case '+':
         case '−':
         case '×':
         case '÷':
             opTxt.textContent += ` ${event.target.textContent} `;
+            pointBtn.classList.remove('inactive-btn');
             break;
         default:
             opTxt.textContent += event.target.textContent;

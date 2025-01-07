@@ -66,3 +66,7 @@ button {
     flex: 2;
     padding: 16px 8px;
 }
+
+.inactive-btn {
+    pointer-events: none;
+}
