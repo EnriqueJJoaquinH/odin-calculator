@@ -49,6 +49,7 @@ function makeCalculation() {
     operationArr.forEach((item, i) => item == 'Ans'? operationArr[i] = lastAnswer : item);
 
     operator1 = + operationArr.splice(0, 1);
+    console.log(opTxt.textContent);
     for (let i = 0; i < operationArr.length; i += 2){
         operation = operationArr[i];
         operator2 = + operationArr[i + 1];
@@ -72,7 +73,9 @@ function deleteLastTyped() {
     else {
         if (opTxt.textContent[opTxt.textContent.length - 1] == '.')
             pointBtn.classList.remove('inactive-btn');
-        opTxt.textContent = opTxt.textContent.trimEnd().slice(0, -1);
+        opTxt.textContent = opTxt.textContent.trimEnd().slice(0, -1).trimEnd();
+        if (['+','−','×','÷'].includes(opTxt.textContent[opTxt.textContent.length - 1]))
+            opTxt.textContent = `${opTxt.textContent} `;
     }
 }
 
@@ -102,6 +105,11 @@ function populateScreen(event) {
         case '−':
         case '×':
         case '÷':
+            let opTxtArr = opTxt.textContent.trimEnd().split('');
+            if (['+','−','×','÷'].includes(opTxtArr[opTxtArr.length - 1])){
+                deleteLastTyped();
+            }
+
             opTxt.textContent += ` ${event.target.textContent} `;
             pointBtn.classList.remove('inactive-btn');
             break;
