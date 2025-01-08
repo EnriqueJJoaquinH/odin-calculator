@@ -44,12 +44,20 @@ function operate(a, operator = '', b = 0) {
     return result;
 }
 
-function getOperationComponents(operationStr) {
-    let operationArr = operationStr.split(' ');
+function makeCalculation() {
+    let operationArr = opTxt.textContent.split(' ');
     operationArr.forEach((item, i) => item == 'Ans'? operationArr[i] = lastAnswer : item);
-    operator1 = +operationArr[0];
-    operation = operationArr[1];
-    operator2 = +operationArr[2];
+
+    operator1 = + operationArr.splice(0, 1);
+    for (let i = 0; i < operationArr.length; i += 2){
+        operation = operationArr[i];
+        operator2 = + operationArr[i + 1];
+        operator1 = operate(operator1, operation, operator2);
+    }
+
+    lastAnswer = operator1;
+    resTxt.textContent = `${lastAnswer}`;
+    pointBtn.classList.remove('inactive-btn');
 }
 
 function clearScreen() {
@@ -73,10 +81,7 @@ function populateScreen(event) {
         return;
 
     if (event.target === equalBtn){
-        getOperationComponents(opTxt.textContent);
-        lastAnswer = operate(operator1, operation, operator2);
-        resTxt.textContent = `${lastAnswer}`;
-        pointBtn.classList.remove('inactive-btn');
+        makeCalculation();
         return;
     }
 
