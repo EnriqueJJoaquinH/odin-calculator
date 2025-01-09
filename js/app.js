@@ -1,3 +1,6 @@
+// ? Constant values
+const OPERATORS = ['+','−','×','÷'];
+
 // ? Global variables
 let operator1 = 0;
 let operator2 = 0;
@@ -9,6 +12,7 @@ let resTxt = document.querySelector('#result');
 let buttons = document.querySelector('#buttons');
 let equalBtn = document.querySelector('#equal-btn');
 let pointBtn = document.querySelector('#decimal-btn');
+let ansBtn = document.querySelector('#ans-btn');
 
 function add(a, b) {
     return a + b;
@@ -49,7 +53,6 @@ function makeCalculation() {
     operationArr.forEach((item, i) => item == 'Ans'? operationArr[i] = lastAnswer : item);
 
     operator1 = + operationArr.splice(0, 1);
-    console.log(opTxt.textContent);
     for (let i = 0; i < operationArr.length; i += 2){
         operation = operationArr[i];
         operator2 = + operationArr[i + 1];
@@ -73,50 +76,82 @@ function deleteLastTyped() {
     else {
         if (opTxt.textContent[opTxt.textContent.length - 1] == '.')
             pointBtn.classList.remove('inactive-btn');
+
         opTxt.textContent = opTxt.textContent.trimEnd().slice(0, -1).trimEnd();
-        if (['+','−','×','÷'].includes(opTxt.textContent[opTxt.textContent.length - 1]))
+        if (OPERATORS.includes(opTxt.textContent[opTxt.textContent.length - 1]))
             opTxt.textContent = `${opTxt.textContent} `;
     }
 }
 
-function populateScreen(event) {
-    if (event.target.id === 'buttons' || Array.from(event.target.classList).includes('row'))
-        return;
-
-    if (event.target === equalBtn){
+function populateScreen(buttonPressed) {
+    if (buttonPressed === '=' || buttonPressed === 'Enter'){
         makeCalculation();
         return;
     }
 
     if (resTxt.textContent != '')
         clearScreen();
-    switch (event.target.textContent) {
+    let opTxtArr = opTxt.textContent.trimEnd().split('');
+    switch (buttonPressed) {
         case 'AC':
+        case 'Delete':
             clearScreen();
             break;
         case 'DEL':
+        case 'Backspace':
             deleteLastTyped();
             break;
         case '•':
+        case '.':
             opTxt.textContent += '.';
             pointBtn.classList.add('inactive-btn');
             break;
         case '+':
         case '−':
+        case '-':
         case '×':
+        case '*':
         case '÷':
-            let opTxtArr = opTxt.textContent.trimEnd().split('');
-            if (['+','−','×','÷'].includes(opTxtArr[opTxtArr.length - 1])){
+        case '/':
+            if (OPERATORS.includes(opTxtArr[opTxtArr.length - 1]))
                 deleteLastTyped();
-            }
 
-            opTxt.textContent += ` ${event.target.textContent} `;
+            if (buttonPressed === '-')
+                buttonPressed = '−';
+            else if (buttonPressed === '*')
+                buttonPressed = '×';
+            else if (buttonPressed === '/')
+                buttonPressed = '÷';
+
+            opTxt.textContent += ` ${buttonPressed} `;
             pointBtn.classList.remove('inactive-btn');
+            ansBtn.classList.remove('inactive-btn');
+            break;
+        case 'Ans':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+        case '0':
+            opTxt.textContent += buttonPressed;
+            ansBtn.classList.add('inactive-btn');
             break;
         default:
-            opTxt.textContent += event.target.textContent;
             break;
     }
 }
 
-buttons.addEventListener('click', populateScreen);
+buttons.addEventListener('click', event => {
+    if (event.target.id === 'buttons' || Array.from(event.target.classList).includes('row'))
+        return;
+    populateScreen(event.target.textContent);
+});
+
+document.addEventListener('keydown', event => {
+    populateScreen(event.key);
+});
