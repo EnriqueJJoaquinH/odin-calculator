@@ -62,25 +62,30 @@ function makeCalculation() {
     lastAnswer = operator1;
     resTxt.textContent = `${lastAnswer}`;
     pointBtn.classList.remove('inactive-btn');
+    ansBtn.classList.remove('inactive-btn');
 }
 
 function clearScreen() {
     opTxt.textContent = '';
     resTxt.textContent = '';
+    pointBtn.classList.remove('inactive-btn');
+    ansBtn.classList.remove('inactive-btn');
 }
 
 function deleteLastTyped() {
     let opTxtArr = opTxt.textContent.split(' ');
-    if (opTxtArr[opTxtArr.length - 1] == 'Ans')
-        opTxt.textContent = opTxt.textContent.replace('Ans', '');
-    else {
+    if (opTxtArr.splice(-1, 1) == 'Ans') {
+        ansBtn.classList.remove('inactive-btn');
+        opTxt.textContent = opTxtArr.join(' ');
+    } else {
         if (opTxt.textContent[opTxt.textContent.length - 1] == '.')
             pointBtn.classList.remove('inactive-btn');
 
         opTxt.textContent = opTxt.textContent.trimEnd().slice(0, -1).trimEnd();
-        if (OPERATORS.includes(opTxt.textContent[opTxt.textContent.length - 1]))
-            opTxt.textContent = `${opTxt.textContent} `;
     }
+
+    if (OPERATORS.includes(opTxt.textContent[opTxt.textContent.length - 1]))
+        opTxt.textContent = `${opTxt.textContent} `;
 }
 
 function populateScreen(buttonPressed) {
@@ -128,6 +133,10 @@ function populateScreen(buttonPressed) {
             ansBtn.classList.remove('inactive-btn');
             break;
         case 'Ans':
+            opTxt.textContent += buttonPressed;
+            pointBtn.classList.add('inactive-btn');
+            ansBtn.classList.add('inactive-btn');
+            break;
         case '1':
         case '2':
         case '3':
