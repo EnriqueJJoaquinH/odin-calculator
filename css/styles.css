@@ -53,16 +53,38 @@ button:hover {
     border-radius: 8px;
     display: flex;
     flex-direction: column;
-    height: 150px;
+    height: 156px;
     color: var(--clear-color);
 }
 
 #screen>* {
     flex: 1;
+    overflow: auto;
 }
 
 #result {
     text-align: right;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--dark-color);
+    border: 1px solid var(--middle-color);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--middle-color);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-corner {
+    background: var(--dark-color);
+    border: 1px solid var(--middle-color);
 }
 
 #buttons {
